@@ -1,7 +1,7 @@
-name: Just Build index.html
+name: Headless Build index.html
 
 on:
-  workflow_dispatch:  # Manual trigger from the Actions tab
+  workflow_dispatch:
 
 jobs:
   build:
@@ -14,16 +14,15 @@ jobs:
       - name: Set up Java 11+
         uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'
+          distribution: temurin
           java-version: '11'
 
-      - name: Run the compile .bat file
-        run: .\CompileLatestClient.bat
+      - name: Initialize workspace
+        run: .\build_init.bat     # prepares MCP / patches
+      
+      - name: Do headless build
+        run: .\build_make_workspace.bat   # compiles everything without GUI :contentReference[oaicite:0]{index=0}
 
-      - name: Move index.html to output folder
+      - name: Collect generated index.html
         run: |
-          mkdir output
-          copy build\index.html output\index.html
-
-      - name: Show build folder contents (debugging)
-        run: dir /s
+          mkdir
