@@ -21,8 +21,18 @@ jobs:
         run: .\build_init.bat
 
       - name: Compile headless (no GUI)
-        run: java -cp "buildtools/BuildTools.jar" net.lax1dude.eaglercraft.v1_8.buildtools.cli.CompileLatestClient
+         shell: pwsh
+         env:
+           # ensure AWT never tries to launch a GUI
+           JAVA_TOOL_OPTIONS: '-Djava.awt.headless=true'
+         run: |
+           # (optional) peek at available flags:
+           java -cp "buildtools/BuildTools.jar" net.lax1dude.eaglercraft.v1_8.buildtools.cli.CompileLatestClient --help
 
+           # actual invocation: enable headless and non-interactive mode
+           java -cp "buildtools/BuildTools.jar" `
+             net.lax1dude.eaglercraft.v1_8.buildtools.cli.CompileLatestClient `
+             --ci                # or --nonInteractive, depending on what '--help' shows
       - name: Prepare output folder
         shell: pwsh
         run: |
