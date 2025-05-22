@@ -23,12 +23,14 @@ jobs:
       - name: Compile headless (no GUI)
         run: java -cp "buildtools/BuildTools.jar" net.lax1dude.eaglercraft.v1_8.buildtools.cli.CompileLatestClient
 
-      - name: Collect generated index.html
+      - name: Prepare output folder
+        shell: pwsh
         run: |
-          mkdir output
-          copy build\index.html output\index.html
+          Remove-Item -Recurse -Force output -ErrorAction Ignore
+          New-Item -ItemType Directory -Path output
+          Copy-Item -Path build\index.html -Destination output\index.html
 
-      - name: Upload index.html artifact
+      - name: Upload index.html as artifact
         uses: actions/upload-artifact@v3
         with:
           name: index-html
