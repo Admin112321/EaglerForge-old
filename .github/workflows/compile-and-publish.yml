@@ -28,7 +28,7 @@ jobs:
           mkdir output
           copy build\index.html output\index.html
 
-      - name: Upload artifact
+      - name: Upload index.html artifact
         uses: actions/upload-artifact@v3
         with:
           name: index-html
