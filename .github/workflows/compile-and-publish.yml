@@ -18,11 +18,18 @@ jobs:
           java-version: '11'
 
       - name: Initialize workspace
-        run: .\build_init.bat     # prepares MCP / patches
-      
-      - name: Do headless build
-        run: .\build_make_workspace.bat   # compiles everything without GUI :contentReference[oaicite:0]{index=0}
+        run: .\build_init.bat
+
+      - name: Compile headless (no GUI)
+        run: java -cp "buildtools/BuildTools.jar" net.lax1dude.eaglercraft.v1_8.buildtools.cli.CompileLatestClient
 
       - name: Collect generated index.html
         run: |
-          mkdir
+          mkdir output
+          copy build\index.html output\index.html
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: index-html
+          path: output/index.html
